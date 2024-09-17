@@ -17,15 +17,26 @@
   <body>
 
     <canvas id="canvasOne" width="500px" height="500px">
+
     </canvas>
 
     <script type="text/javascript">
+        
+           
+            
+
 		// Gets a handle to the element with id canvasOne.
-		
+		const canvas = document.getElementById("canvasOne");
 		// Set the canvas up for drawing in 2D.
+		const ctx = canvas.getContext("2d");
+        //code for first two steps in one line
+        //const ctx = document.getElementById("canvasOne").getContext("2d");
+       
+        //print text
+        ctx.font = "48px serif";
+        ctx.fillText("Liam Ryan", 10, 50);
 		
-		// Set the fill colour to bright red.
-		
+        // Set the fill colour to bright red.
 		// Create a filled rectangle 
 		
 	  
