@@ -43,6 +43,20 @@
         ctx.fillStyle = "rgba(255, 255, 0, 0.4)";
          // Create a second filled rectangle 	
          ctx.fillRect(50,150, 150, 100);
+
+
+         //creating circles
+         ctx.beginPath();
+         ctx.arc(150,150, 30, 0, 2*Math.PI);
+         ctx.fillStyle = "rgb(255, 100, 150)";
+         ctx.fill();
+         ctx.stroke(); 
+
+         ctx.beginPath();
+         ctx.arc(100,200, 30, 0, 2*Math.PI);
+         ctx.fillStyle = "rgb(255, 100, 150)";
+         ctx.fill();
+         ctx.stroke(); 
     </script>
 
   </body>
