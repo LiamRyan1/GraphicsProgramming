@@ -31,15 +31,16 @@
         //Set Font size
         ctx.font = "48px serif";
          // Set the fill colour to bright red.
-        ctx.fillStyle = "rgb(255, 0, 0)";
+        ctx.fillStyle = "rgb(255, 0, 0,)";
         //print text
         ctx.fillText("Liam Ryan", 10, 50);
        
-        
+        //change transparency for rectangle
+        ctx.fillStyle = "rgba(255, 0, 0, 0.4)";
         // Create a filled rectangle 	
         ctx.fillRect(100, 100, 150, 100);
         // Change color
-        ctx.fillStyle = "rgb(255, 255, 0)";
+        ctx.fillStyle = "rgba(255, 255, 0, 0.4)";
          // Create a second filled rectangle 	
          ctx.fillRect(50,150, 150, 100);
     </script>
