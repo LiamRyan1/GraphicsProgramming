@@ -59,6 +59,27 @@
          ctx.fillStyle = "rgb(150, 150, 150)";
          ctx.fill();
          ctx.stroke(); 
+
+         //creating semi-circle and three quarter circle
+         ctx.beginPath();
+         ctx.strokeStyle = "black";
+         ctx.arc(350,350, 30, 0, 1*Math.PI);
+         ctx.moveTo(380,350);
+         ctx.lineTo(320,350);
+         ctx.stroke(); 
+         
+        
+
+         // 3/4 circle
+         ctx.beginPath();
+         ctx.strokeStyle = "black";
+         ctx.arc(450,450, 30, 0, 1.5*Math.PI);
+         ctx.moveTo(450,450);
+         ctx.lineTo(450,420);
+         ctx.moveTo(450,450);
+         ctx.lineTo(480,450);
+         
+         ctx.stroke(); 
     </script>
 
   </body>
