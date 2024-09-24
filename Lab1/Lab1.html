@@ -45,10 +45,13 @@
          ctx.fillRect(50,150, 150, 100);
 
 
-         //creating circles
+         // Creating circles
          ctx.beginPath();
+         // Change outline color
          ctx.strokeStyle = "blue";
+         // cicrle specifications
          ctx.arc(150,150, 30, 0, 2*Math.PI);
+         // Color inside of circle
          ctx.fillStyle = "rgb(255, 100, 150)";
          ctx.fill();
          ctx.stroke(); 
@@ -60,10 +63,11 @@
          ctx.fill();
          ctx.stroke(); 
 
-         //creating semi-circle and three quarter circle
+         // creating semi-circle and three quarter circle
          ctx.beginPath();
          ctx.strokeStyle = "black";
          ctx.arc(350,350, 30, 0, 1*Math.PI);
+         // draw line across top of semi-cicle
          ctx.moveTo(380,350);
          ctx.lineTo(320,350);
          ctx.stroke(); 
@@ -74,6 +78,7 @@
          ctx.beginPath();
          ctx.strokeStyle = "black";
          ctx.arc(450,450, 30, 0, 1.5*Math.PI);
+         // add outline to the sliced area
          ctx.lineTo(450,450);
          ctx.lineTo(480,450);
          ctx.stroke(); 
