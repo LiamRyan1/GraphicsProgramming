@@ -30,6 +30,7 @@
       
       // The vertical location of the ball.
       var y = 10;
+      var ySpeed = 1;
       // A function to repeat every time the animation loops.
       function repeatme() {
         // Clear Canvas on each frame
@@ -39,10 +40,15 @@
         ctx.arc(50, y, 3, 0, 2 * Math.PI);
         ctx.stroke();
         // Update the y location.
-        y += 1;
+        y += ySpeed;
+        // Reverse ball direction
         if(y >= canvas.height-3)
         {
-            return;
+           ySpeed = ySpeed*-1;
+        }
+        else if(y <= canvas.height)
+        {
+
         }
         window.requestAnimationFrame(repeatme);
       }
