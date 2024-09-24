@@ -30,58 +30,63 @@
        
         //Set Font size
         ctx.font = "48px serif";
-         // Set the fill colour to bright red.
+        // Set the fill colour to bright red.
         ctx.fillStyle = "rgb(255, 0, 0,)";
         //print text
         ctx.fillText("Liam Ryan", 10, 50);
        
         //change transparency for rectangle
+        ctx.strokeStyle = "Black"
         ctx.fillStyle = "rgba(255, 0, 0, 0.4)";
         // Create a filled rectangle 	
         ctx.fillRect(100, 100, 150, 100);
+        ctx.strokeRect(100,100,150,100);
         // Change color
         ctx.fillStyle = "rgba(255, 255, 0, 0.4)";
+       
          // Create a second filled rectangle 	
-         ctx.fillRect(50,150, 150, 100);
+        ctx.fillRect(50,150, 150, 100);
+        ctx.strokeRect(50,150,150,100);
+        
+       
 
+        // Creating circles
+        ctx.beginPath();
+        // Change outline color
+        ctx.strokeStyle = "blue";
+        // cicrle specifications
+        ctx.arc(150,150, 30, 0, 2*Math.PI);
+        // Color inside of circle
+        ctx.fillStyle = "rgb(255, 100, 150)";
+        ctx.fill();
+        ctx.stroke(); 
 
-         // Creating circles
-         ctx.beginPath();
-         // Change outline color
-         ctx.strokeStyle = "blue";
-         // cicrle specifications
-         ctx.arc(150,150, 30, 0, 2*Math.PI);
-         // Color inside of circle
-         ctx.fillStyle = "rgb(255, 100, 150)";
-         ctx.fill();
-         ctx.stroke(); 
+        ctx.beginPath();
+        ctx.strokeStyle = "orange";
+        ctx.arc(100,200, 30, 0, 2*Math.PI);
+        ctx.fillStyle = "rgb(150, 150, 150)";
+        ctx.fill();
+        ctx.stroke(); 
 
-         ctx.beginPath();
-         ctx.strokeStyle = "orange";
-         ctx.arc(100,200, 30, 0, 2*Math.PI);
-         ctx.fillStyle = "rgb(150, 150, 150)";
-         ctx.fill();
-         ctx.stroke(); 
-
-         // creating semi-circle and three quarter circle
-         ctx.beginPath();
-         ctx.strokeStyle = "black";
-         ctx.arc(350,350, 30, 0, 1*Math.PI);
-         // draw line across top of semi-cicle
-         ctx.moveTo(380,350);
-         ctx.lineTo(320,350);
-         ctx.stroke(); 
+        // creating semi-circle and three quarter circle
+        ctx.beginPath();
+        ctx.strokeStyle = "black";
+        ctx.arc(350,350, 30, 0, 1*Math.PI);
+        // draw line across top of semi-cicle
+        ctx.moveTo(380,350);
+        ctx.lineTo(320,350);
+        ctx.stroke(); 
          
         
 
-         // 3/4 circle
-         ctx.beginPath();
-         ctx.strokeStyle = "black";
-         ctx.arc(450,450, 30, 0, 1.5*Math.PI);
-         // add outline to the sliced area
-         ctx.lineTo(450,450);
-         ctx.lineTo(480,450);
-         ctx.stroke(); 
+        // 3/4 circle
+        ctx.beginPath();
+        ctx.strokeStyle = "black";
+        ctx.arc(450,450, 30, 0, 1.5*Math.PI);
+        // add outline to the sliced area
+        ctx.lineTo(450,450);
+        ctx.lineTo(480,450);
+        ctx.stroke(); 
     </script>
 
   </body>
