@@ -41,14 +41,15 @@
         ctx.stroke();
         // Update the y location.
         y += ySpeed;
-        // Reverse ball direction
+        // Reverse ball direction on contact with bottom
         if(y >= canvas.height-3)
         {
            ySpeed = ySpeed*-1;
         }
-        else if(y <= canvas.height)
+        // Reverse ball direction on contact with top
+        else if(y <= 0)
         {
-
+            ySpeed = ySpeed*-1;
         }
         window.requestAnimationFrame(repeatme);
       }
