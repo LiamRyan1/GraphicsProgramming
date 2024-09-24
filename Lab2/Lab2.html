@@ -38,10 +38,12 @@
         ctx.beginPath();
         ctx.arc(50, y, 3, 0, 2 * Math.PI);
         ctx.stroke();
-        
         // Update the y location.
         y += 1;
-        
+        if(y >= canvas.height-3)
+        {
+            return;
+        }
         window.requestAnimationFrame(repeatme);
       }
       
