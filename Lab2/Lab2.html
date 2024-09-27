@@ -23,52 +23,6 @@
     <canvas id="canvas-for-ball" height="500" width="500"></canvas>
 
     <script type="text/javascript">
-        /*   
-        // Gets a handle to the element with id canvasOne.
-        var canvas = document.getElementById("canvas-for-ball");
-        // Get a 2D context for the canvas.
-        var ctx = canvas.getContext("2d");
-        
-        // The vertical location of the ball.
-        var y = 10;
-        var ySpeed = 1;
-        var x = 50;
-        var xSpeed = 1;
-        // A function to repeat every time the animation loops.
-    function repeatme() {
-        // Clear Canvas on each frame
-        ctx.clearRect(0, 0, 500,500);
-        // Draw the ball (stroked, not filled).
-        ctx.beginPath();
-        ctx.arc(x, y, 3, 0, 2 * Math.PI);
-        ctx.stroke();
-        // Update the y and x location.
-        y += ySpeed;
-        x += xSpeed;
-        // Reverse ball direction on contact with bottom
-        if(y >= canvas.height-3)
-        {
-            ySpeed = ySpeed*-1;
-        }
-        // Reverse ball direction on contact with top
-        else if(y <= 3)
-        {
-            ySpeed = ySpeed*-1;
-        }
-        // Bounce from side to side
-        if(x >= canvas.width-3)
-        {
-            xSpeed = xSpeed*-1;
-        }
-        else if(x <= 3)
-        {
-            xSpeed = xSpeed*-1;
-        }
-        window.requestAnimationFrame(repeatme);
-    }
-        // Get the animation going.
-        repeatme();
-        */
         // Gets a handle to the element with id canvasOne.
         var canvas = document.getElementById("canvas-for-ball");
         // Get a 2D context for the canvas.
@@ -76,6 +30,7 @@
 
         class Ball {
             constructor(xPos, yPos, xVelocity, yVelocity, radius, rotation) {
+                //fields describing the object
                 this.yPos = yPos;
                 this.yVelocity = yVelocity;
                 this.xPos = xPos;
@@ -84,7 +39,7 @@
                 this.rotation = rotation;
             }
             Draw() {
-                // Draw the ball (stroked, not filled).
+                //Draw the ball (stroked, not filled).
                 ctx.beginPath();
                 ctx.arc(this.xPos, this.yPos, this.radius, 0, 2 * Math.PI);
                 ctx.stroke();
@@ -109,11 +64,12 @@
                 ctx.moveTo(this.xPos, this.yPos);
                 //draw line to outside point 2
                 ctx.lineTo(x2, y2);
-            
                 ctx.moveTo(this.xPos, this.yPos);
+                //draw line to outside point 3
                 ctx.lineTo(x3, y3);
                 ctx.moveTo(this.xPos, this.yPos);
-                ctx.lineTo(x4,y4);
+                //draw line to outside point 4
+                ctx.lineTo(x4, y4);
                 ctx.stroke();
 
             }
@@ -138,16 +94,21 @@
                 }
             }
         }
-        myBall = new Ball(50, 49, 1, 1, 49,0);
+        //create object myball
+        myBall = new Ball(50, 49, 1, 1, 49, 0);
         function repeatme() {
+            //clear canvas every frame
             ctx.clearRect(0, 0, 500, 500);
             myBall.Draw();
             myBall.Move();
             window.requestAnimationFrame(repeatme);
         }
+        // Get the animation going.
         repeatme();
     </script>
 
+
 </body>
+
 
 </html>
