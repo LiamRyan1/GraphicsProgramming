@@ -43,7 +43,8 @@
                 ctx.beginPath();
                 ctx.arc(this.xPos, this.yPos, this.radius, 0, 2 * Math.PI);
                 ctx.stroke();
-
+            }
+            rotate() {
                 //rotation speed
                 this.rotation = this.rotation + 0.025;
                 //calculate the outer points of the circle for the peace symbol
@@ -71,7 +72,6 @@
                 //draw line to outside point 4
                 ctx.lineTo(x4, y4);
                 ctx.stroke();
-
             }
             Move() {
                 // Update the y and x location.
@@ -101,6 +101,7 @@
             ctx.clearRect(0, 0, 500, 500);
             myBall.Draw();
             myBall.Move();
+            myBall.rotate();
             window.requestAnimationFrame(repeatme);
         }
         // Get the animation going.
