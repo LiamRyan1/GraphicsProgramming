@@ -75,18 +75,47 @@
         var ctx = canvas.getContext("2d");
 
         class Ball {
-            constructor(xPos, yPos, xVelocity, yVelocity,radius) {
+            constructor(xPos, yPos, xVelocity, yVelocity, radius, rotation) {
                 this.yPos = yPos;
                 this.yVelocity = yVelocity;
                 this.xPos = xPos;
                 this.xVelocity = xVelocity;
                 this.radius = radius;
+                this.rotation = rotation;
             }
             Draw() {
                 // Draw the ball (stroked, not filled).
                 ctx.beginPath();
-                ctx.arc(this.xPos, this.yPos,this.radius, 0, 2 * Math.PI);
+                ctx.arc(this.xPos, this.yPos, this.radius, 0, 2 * Math.PI);
                 ctx.stroke();
+
+                //rotation speed
+                this.rotation = this.rotation + 0.025;
+                //calculate the outer points of the circle for the peace symbol
+                // x= (r*cos(0) + rotation)+ center x position of cirlce
+                // y= (r*sin(0) + rotation)+ center y position of cirlce
+                var y1 = (this.radius * Math.sin((Math.PI / 4) + this.rotation)) + this.yPos;
+                var x1 = (this.radius * Math.cos((Math.PI / 4) + this.rotation)) + this.xPos;
+                var y2 = (this.radius * Math.sin((3 * Math.PI / 4) + this.rotation)) + this.yPos;
+                var x2 = (this.radius * Math.cos((3 * Math.PI / 4) + this.rotation)) + this.xPos;
+                var y3 = (this.radius * Math.sin((Math.PI / 2) + this.rotation)) + this.yPos;
+                var x3 = (this.radius * Math.cos((Math.PI / 2) + this.rotation)) + this.xPos;
+                var y4 = (this.radius * Math.sin((6 * Math.PI / 4) + this.rotation)) + this.yPos;
+                var x4 = (this.radius * Math.cos((6 * Math.PI / 4) + this.rotation)) + this.xPos;
+                //move pen to center of cirlce
+                ctx.moveTo(this.xPos, this.yPos);
+                //draw line to outside point 1
+                ctx.lineTo(x1, y1);
+                ctx.moveTo(this.xPos, this.yPos);
+                //draw line to outside point 2
+                ctx.lineTo(x2, y2);
+            
+                ctx.moveTo(this.xPos, this.yPos);
+                ctx.lineTo(x3, y3);
+                ctx.moveTo(this.xPos, this.yPos);
+                ctx.lineTo(x4,y4);
+                ctx.stroke();
+
             }
             Move() {
                 // Update the y and x location.
@@ -109,7 +138,7 @@
                 }
             }
         }
-        myBall = new Ball(50, 49, 10, 10,49);
+        myBall = new Ball(50, 49, 1, 1, 49,0);
         function repeatme() {
             ctx.clearRect(0, 0, 500, 500);
             myBall.Draw();
