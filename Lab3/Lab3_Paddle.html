@@ -29,18 +29,36 @@
         var ctx = canvas.getContext("2d");
         
         class Paddle{
-            constructor(width,height,xPos,yPos){
+            constructor(width,height,yPos,xPos){
                 this.width = width;
                 this.height = height;
                 this.xPos = xPos;
                 this.yPos = yPos;
+                
             }
             draw() 
             {
                 ctx.fillRect(this.yPos, this.xPos, this.width, this.height);
         
             }
-            move(){
+            move(movement){
+                if(movement == 1)
+                {
+                    this.yPos += -1;
+                }
+                else if(movement == 2)
+                {
+                    this.yPos += 1;
+                }
+                else if(movement == 3)
+                {
+                    this.xPos += -1;
+                }
+                else if(movement == 4)
+                {
+                    this.xPos += 1;
+                }
+
             }
         }
         class Ball {
@@ -124,20 +142,27 @@
 			        switch (e.which) {
 			        // key code for left arrow
 			        case 37:
-				       console.log('left arrow key pressed!');
+                        myPaddle.move(1);
+				        console.log('left arrow key pressed!');
 				    break;
-
+                    case 38:
+                        myPaddle.move(3);
+                        console.log('up arrow pressed');
+                    break;
 			        // key code for right arrow
 			        case 39:
+                        myPaddle.move(2);
 				        console.log('right arrow key pressed!');
 				    break;
+                    case 40:
+                        myPaddle.move(4);
+                        console.log('down arrow pressed');
 			        }
 		        });
         function repeatme() {
             //clear canvas every frame
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             myPaddle.draw();
-            myPaddle.move();
             myBall.draw();
             myBall.move();
             myBall.rotate();
