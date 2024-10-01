@@ -23,68 +23,54 @@
     <canvas id="canvas-for-ball" height="500" width="500"></canvas>
 
     <script type="text/javascript">
-        /*   
-        // Gets a handle to the element with id canvasOne.
-        var canvas = document.getElementById("canvas-for-ball");
-        // Get a 2D context for the canvas.
-        var ctx = canvas.getContext("2d");
-        
-        // The vertical location of the ball.
-        var y = 10;
-        var ySpeed = 1;
-        var x = 50;
-        var xSpeed = 1;
-        // A function to repeat every time the animation loops.
-    function repeatme() {
-        // Clear Canvas on each frame
-        ctx.clearRect(0, 0, 500,500);
-        // Draw the ball (stroked, not filled).
-        ctx.beginPath();
-        ctx.arc(x, y, 3, 0, 2 * Math.PI);
-        ctx.stroke();
-        // Update the y and x location.
-        y += ySpeed;
-        x += xSpeed;
-        // Reverse ball direction on contact with bottom
-        if(y >= canvas.height-3)
-        {
-            ySpeed = ySpeed*-1;
-        }
-        // Reverse ball direction on contact with top
-        else if(y <= 3)
-        {
-            ySpeed = ySpeed*-1;
-        }
-        // Bounce from side to side
-        if(x >= canvas.width-3)
-        {
-            xSpeed = xSpeed*-1;
-        }
-        else if(x <= 3)
-        {
-            xSpeed = xSpeed*-1;
-        }
-        window.requestAnimationFrame(repeatme);
-    }
-        // Get the animation going.
-        repeatme();
-        */
         // Gets a handle to the element with id canvasOne.
         var canvas = document.getElementById("canvas-for-ball");
         // Get a 2D context for the canvas.
         var ctx = canvas.getContext("2d");
 
         class Ball {
-            constructor(xPos, yPos, xVelocity, yVelocity) {
+            constructor(xPos, yPos, xVelocity, yVelocity, radius, rotation) {
+                //fields describing the object
                 this.yPos = yPos;
                 this.yVelocity = yVelocity;
                 this.xPos = xPos;
                 this.xVelocity = xVelocity;
+                this.radius = radius;
+                this.rotation = rotation;
             }
             Draw() {
-                // Draw the ball (stroked, not filled).
+                //Draw the ball (stroked, not filled).
                 ctx.beginPath();
-                ctx.arc(this.xPos, this.yPos, 3, 0, 2 * Math.PI);
+                ctx.arc(this.xPos, this.yPos, this.radius, 0, 2 * Math.PI);
+                ctx.stroke();
+            }
+            rotate() {
+                //rotation speed
+                this.rotation = this.rotation + 0.025;
+                //calculate the outer points of the circle for the peace symbol
+                // x= (r*cos(0) + rotation)+ center x position of cirlce
+                // y= (r*sin(0) + rotation)+ center y position of cirlce
+                var y1 = (this.radius * Math.sin((Math.PI / 4) + this.rotation)) + this.yPos;
+                var x1 = (this.radius * Math.cos((Math.PI / 4) + this.rotation)) + this.xPos;
+                var y2 = (this.radius * Math.sin((3 * Math.PI / 4) + this.rotation)) + this.yPos;
+                var x2 = (this.radius * Math.cos((3 * Math.PI / 4) + this.rotation)) + this.xPos;
+                var y3 = (this.radius * Math.sin((Math.PI / 2) + this.rotation)) + this.yPos;
+                var x3 = (this.radius * Math.cos((Math.PI / 2) + this.rotation)) + this.xPos;
+                var y4 = (this.radius * Math.sin((6 * Math.PI / 4) + this.rotation)) + this.yPos;
+                var x4 = (this.radius * Math.cos((6 * Math.PI / 4) + this.rotation)) + this.xPos;
+                //move pen to center of cirlce
+                ctx.moveTo(this.xPos, this.yPos);
+                //draw line to outside point 1
+                ctx.lineTo(x1, y1);
+                ctx.moveTo(this.xPos, this.yPos);
+                //draw line to outside point 2
+                ctx.lineTo(x2, y2);
+                ctx.moveTo(this.xPos, this.yPos);
+                //draw line to outside point 3
+                ctx.lineTo(x3, y3);
+                ctx.moveTo(this.xPos, this.yPos);
+                //draw line to outside point 4
+                ctx.lineTo(x4, y4);
                 ctx.stroke();
             }
             Move() {
@@ -92,32 +78,38 @@
                 this.yPos += this.yVelocity;
                 this.xPos += this.xVelocity;
                 // Reverse ball direction on contact with bottom
-                if (this.yPos >= canvas.height - 3) {
+                if (this.yPos >= canvas.height - this.radius) {
                     this.yVelocity = this.yVelocity * -1;
                 }
                 // Reverse ball direction on contact with top
-                else if (this.yPos <= 3) {
+                else if (this.yPos <= this.radius) {
                     this.yVelocity = this.yVelocity * -1;
                 }
                 // Bounce from side to side
-                if (this.xPos >= canvas.width - 3) {
+                if (this.xPos >= canvas.width - this.radius) {
                     this.xVelocity = this.xVelocity * -1;
                 }
-                else if (this.xPos <= 3) {
+                else if (this.xPos <= this.radius) {
                     this.xVelocity = this.xVelocity * -1;
                 }
             }
         }
-        myBall = new Ball(50, 10, 1, 1);
+        //create object myball
+        myBall = new Ball(50, 49, 1, 1, 49, 0);
         function repeatme() {
-            ctx.clearRect(0, 0, 500, 500);
+            //clear canvas every frame
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             myBall.Draw();
             myBall.Move();
+            myBall.rotate();
             window.requestAnimationFrame(repeatme);
         }
+        // Get the animation going.
         repeatme();
     </script>
 
+
 </body>
+
 
 </html>
