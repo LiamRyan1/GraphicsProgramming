@@ -2,6 +2,7 @@
 
 <html>
 <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
 <head>
     <meta charset="UTF-8">
     <title>Canvas</title>
@@ -27,35 +28,30 @@
         var canvas = document.getElementById("canvas-for-ball");
         // Get a 2D context for the canvas.
         var ctx = canvas.getContext("2d");
-        
-        class Paddle{
-            constructor(width,height,yPos,xPos){
+
+        class Paddle {
+            constructor(width, height, yPos, xPos) {
                 this.width = width;
                 this.height = height;
                 this.xPos = xPos;
                 this.yPos = yPos;
-                
+
             }
-            draw() 
-            {
-                ctx.fillRect(this.yPos, this.xPos, this.width, this.height);
-        
+            draw() {
+                ctx.fillRect(this.xPos, this.yPos, this.width, this.height);
+
             }
-            move(movement){
-                if(movement == 1)
-                {
+            move(movement) {
+                if (movement == 3) {
                     this.yPos += -1;
                 }
-                else if(movement == 2)
-                {
+                else if (movement == 4) {
                     this.yPos += 1;
                 }
-                else if(movement == 3)
-                {
+                else if (movement == 1) {
                     this.xPos += -1;
                 }
-                else if(movement == 4)
-                {
+                else if (movement == 2) {
                     this.xPos += 1;
                 }
 
@@ -129,39 +125,64 @@
         }
         //create object myball
         myBall = new Ball(50, 49, 1, 1, 49, 0);
-        myPaddle = new Paddle(26,100,25,25);
-         //Add a Javascript event listener to the keypress event.
-		        window.addEventListener("keypress", function(event) { 
-			    // Just log the event to the console.
-			    console.log(event);
-	    	    });
+        myPaddle = new Paddle(26, 100, 25, 25);
+        myPaddle2 = new Paddle(26, 100, 25, 450);
+        //Add a Javascript event listener to the keypress event.
+        window.addEventListener("keypress", function (event) {
+            // Just log the event to the console.
+            console.log(event);
+        });
 
-		        //keypresses with jQuery
-		        $(document.body).on('keydown', function(e) {
-			        console.log(e.which);
-			        switch (e.which) {
-			        // key code for left arrow
-			        case 37:
-                        myPaddle.move(1);
-				        console.log('left arrow key pressed!');
-				    break;
-                    case 38:
-                        myPaddle.move(3);
-                        console.log('up arrow pressed');
+        //keypresses with jQuery
+        $(document.body).on('keydown', function (e) {
+            console.log(e.which);
+            switch (e.which) {
+                // key code for left arrow
+                case 37:
+                    myPaddle.move(1);
+                    console.log('left arrow key pressed!');
                     break;
-			        // key code for right arrow
-			        case 39:
-                        myPaddle.move(2);
-				        console.log('right arrow key pressed!');
-				    break;
-                    case 40:
-                        myPaddle.move(4);
-                        console.log('down arrow pressed');
-			        }
-		        });
+                case 38:
+                    myPaddle.move(3);
+                    console.log('up arrow pressed');
+                    break;
+                // key code for right arrow
+                case 39:
+                    myPaddle.move(2);
+                    console.log('right arrow key pressed!');
+                    break;
+                case 40:
+                    myPaddle.move(4);
+                    console.log('down arrow pressed');
+            }
+        });
+        //SECOND PADDLE MOVEMENT
+        $(document.body).on('keydown', function (e) {
+            console.log(e.which);
+            switch (e.which) {
+                // key code for left arrow
+                case 65:
+                    myPaddle2.move(1);
+                    console.log('left arrow key pressed!');
+                    break;
+                case 87:
+                    myPaddle2.move(3);
+                    console.log('up arrow pressed');
+                    break;
+                // key code for right arrow
+                case 68:
+                    myPaddle2.move(2);
+                    console.log('right arrow key pressed!');
+                    break;
+                case 83:
+                    myPaddle2.move(4);
+                    console.log('down arrow pressed');
+            }
+        });
         function repeatme() {
             //clear canvas every frame
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            myPaddle2.draw();
             myPaddle.draw();
             myBall.draw();
             myBall.move();
