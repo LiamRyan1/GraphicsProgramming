@@ -30,6 +30,7 @@
         var ctx = canvas.getContext("2d");
 
         class Paddle {
+            //class attributes for paddle
             constructor(width, height, yPos, xPos) {
                 this.width = width;
                 this.height = height;
@@ -41,6 +42,7 @@
                 ctx.fillRect(this.xPos, this.yPos, this.width, this.height);
 
             }
+            //paddle x and y corodinate 
             move(movement) {
                 if (movement == 3) {
                     this.yPos += -1;
@@ -73,9 +75,10 @@
                 ctx.arc(this.xPos, this.yPos, this.radius, 0, 2 * Math.PI);
                 ctx.stroke();
             }
-            rotate() {
+            //rotate takes argument rotate speed
+            rotate(rotateSpeed) {
                 //rotation speed
-                this.rotation = this.rotation + 0.025;
+                this.rotation = this.rotation + rotateSpeed;
                 //calculate the outer points of the circle for the peace symbol
                 // x= (r*cos(0) + rotation)+ center x position of cirlce
                 // y= (r*sin(0) + rotation)+ center y position of cirlce
@@ -127,6 +130,7 @@
         myBall = new Ball(50, 49, 1, 1, 49, 0);
         myPaddle = new Paddle(26, 100, 25, 25);
         myPaddle2 = new Paddle(26, 100, 25, 450);
+        var rotateSpeed = 0.0250;
         //Add a Javascript event listener to the keypress event.
         window.addEventListener("keypress", function (event) {
             // Just log the event to the console.
@@ -142,6 +146,7 @@
                     myPaddle.move(1);
                     console.log('left arrow key pressed!');
                     break;
+                //key code for up arrow
                 case 38:
                     myPaddle.move(3);
                     console.log('up arrow pressed');
@@ -151,6 +156,7 @@
                     myPaddle.move(2);
                     console.log('right arrow key pressed!');
                     break;
+                // key code for down arrow
                 case 40:
                     myPaddle.move(4);
                     console.log('down arrow pressed');
@@ -160,27 +166,54 @@
         $(document.body).on('keydown', function (e) {
             console.log(e.which);
             switch (e.which) {
-                // key code for left arrow
+                //A
                 case 65:
                     myPaddle2.move(1);
                     console.log('left arrow key pressed!');
                     break;
+                //W
                 case 87:
                     myPaddle2.move(3);
                     console.log('up arrow pressed');
                     break;
-                // key code for right arrow
+                //D
                 case 68:
                     myPaddle2.move(2);
                     console.log('right arrow key pressed!');
                     break;
+                //S
                 case 83:
                     myPaddle2.move(4);
                     console.log('down arrow pressed');
             }
         });
-        canvas.addEventListener("mousemove", function(event) { 
-            myPaddle.yPos = event.clientY-canvas.offsetTop;
+        //listen for mouse movement in x and 
+        canvas.addEventListener("mousemove", function (event) {
+            myPaddle.yPos = event.clientY - canvas.offsetTop;
+        });
+        $(document.body).on('keydown', function (e) {
+            switch (e.which) {
+                //z
+                case 90:
+                    //slow down/invert rotatespeed
+                     //if statement to prevent inverse rotation
+                    if(rotateSpeed > 0)
+                    {
+                    rotateSpeed = rotateSpeed-0.025;
+                    }
+                    console.log(rotateSpeed);
+                    break;
+                //x
+                case 88:
+                    //increase rotate speed
+                    //if statement for speed cap
+                    if(rotateSpeed < 0.1)
+                    {
+                    rotateSpeed = rotateSpeed+0.025;
+                    }
+                    console.log(rotateSpeed);
+                    break;
+            }
         });
         function repeatme() {
             //clear canvas every frame
@@ -189,7 +222,7 @@
             myPaddle.draw();
             myBall.draw();
             myBall.move();
-            myBall.rotate();
+            myBall.rotate(rotateSpeed);
             window.requestAnimationFrame(repeatme);
         }
         // Get the animation going.
