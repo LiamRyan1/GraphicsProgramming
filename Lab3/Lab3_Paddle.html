@@ -114,17 +114,21 @@
 
                 // Reverse ball direction on contact with bottom
                 if (this.yPos >= canvas.height - this.radius) {
-                    this.yPos = canvas.height - this.radius; 
+                    //prevent gravity acceleration pushing the ball down
+                    this.yPos = canvas.height - this.radius;
+                    //90% speed after bouncing
                     this.yVelocity *= -0.9;
                 }
                 // Reverse ball direction on contact with top
                 else if (this.yPos <= this.radius) {
+                    //reset the ball to prevent going through the top
                     this.yPos = this.radius;
+                    //90% speed after bouncing
                     this.yVelocity *= -0.9;
                 }
                 // Bounce from side to side
                 if (this.xPos >= canvas.width - this.radius) {
-                    this.xPos = canvas.width - this.radius; 
+                    this.xPos = canvas.width - this.radius;
                     this.xVelocity *= -0.9;
                     console.log(this.xVelocity);
                 }
@@ -196,8 +200,8 @@
                     //if statement to prevent inverse rotation
                     if (rotateSpeed > 0) {
                         rotateSpeed = rotateSpeed - 0.025;
-                        if(rotateSpeed < 0)
-                        {
+                        //if speed is below the cap set it to the cap
+                        if (rotateSpeed < 0) {
                             rotateSpeed = 0;
                         }
                     }
@@ -209,8 +213,8 @@
                     //if statement for rotation cap
                     if (rotateSpeed < 0.1) {
                         rotateSpeed = rotateSpeed + 0.025;
-                        if(rotateSpeed > 0.1)
-                        {
+                        //if speed is above the cap set it to the cap
+                        if (rotateSpeed > 0.1) {
                             rotateSpeed = 0.1;
                         }
                     }
@@ -239,9 +243,6 @@
         // Get the animation going.
         repeatme();
     </script>
-
-
 </body>
-
 
 </html>
