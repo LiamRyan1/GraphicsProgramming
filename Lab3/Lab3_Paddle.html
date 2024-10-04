@@ -130,7 +130,7 @@
         myBall = new Ball(50, 49, 1, 1, 49, 0);
         myPaddle = new Paddle(26, 100, 25, 25);
         myPaddle2 = new Paddle(26, 100, 25, 450);
-        var rotateSpeed = 0.0250;
+        var rotateSpeed = 0.025;
         var mousePosition;
         //Add a Javascript event listener to the keypress event.
         window.addEventListener("keypress", function (event) {
@@ -187,15 +187,23 @@
                     //if statement to prevent inverse rotation
                     if (rotateSpeed > 0) {
                         rotateSpeed = rotateSpeed - 0.025;
+                        if(rotateSpeed < 0)
+                        {
+                            rotateSpeed = 0;
+                        }
                     }
                     console.log(rotateSpeed);
                     break;
                 //x
                 case 88:
                     //increase rotate speed
-                    //if statement for speed cap
+                    //if statement for rotation cap
                     if (rotateSpeed < 0.1) {
                         rotateSpeed = rotateSpeed + 0.025;
+                        if(rotateSpeed > 0.1)
+                        {
+                            rotateSpeed = 0.1;
+                        }
                     }
                     console.log(rotateSpeed);
                     break;
