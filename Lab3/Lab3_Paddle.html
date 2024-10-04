@@ -68,6 +68,7 @@
                 this.xVelocity = xVelocity;
                 this.radius = radius;
                 this.rotation = rotation;
+                this.gravity = 0.5;
             }
             draw() {
                 //Draw the ball (stroked, not filled).
@@ -107,22 +108,30 @@
             }
             move() {
                 // Update the y and x location.
+                this.yVelocity += this.gravity;
                 this.yPos += this.yVelocity;
                 this.xPos += this.xVelocity;
+
                 // Reverse ball direction on contact with bottom
                 if (this.yPos >= canvas.height - this.radius) {
-                    this.yVelocity = this.yVelocity * -1;
+                    this.yPos = canvas.height - this.radius; 
+                    this.yVelocity *= -0.9;
                 }
                 // Reverse ball direction on contact with top
                 else if (this.yPos <= this.radius) {
-                    this.yVelocity = this.yVelocity * -1;
+                    this.yPos = this.radius;
+                    this.yVelocity *= -0.9;
                 }
                 // Bounce from side to side
                 if (this.xPos >= canvas.width - this.radius) {
-                    this.xVelocity = this.xVelocity * -1;
+                    this.xPos = canvas.width - this.radius; 
+                    this.xVelocity *= -0.9;
+                    console.log(this.xVelocity);
                 }
                 else if (this.xPos <= this.radius) {
-                    this.xVelocity = this.xVelocity * -1;
+                    this.xPos = this.radius;
+                    this.xVelocity *= -0.9;
+                    console.log(this.xVelocity);
                 }
             }
         }
