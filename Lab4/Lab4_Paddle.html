@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas</title>
+    <h1>Liam Ryan</h1>
+    <style type="text/css">
+        body {
+            background-color: white;
+        }
+
+        canvas {
+            border: 5px solid black;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <canvas id="canvas-for-ball" height="500" width="500"></canvas>
+
+    <script type="text/javascript">
+        // Gets a handle to the element with id canvasOne.
+        var canvas = document.getElementById("canvas-for-ball");
+        // Get a 2D context for the canvas.
+        var ctx = canvas.getContext("2d");
+
+        class Paddle {
+            //class attributes for paddle
+            constructor(width, height, yPos, xPos) {
+                this.width = width;
+                this.height = height;
+                this.xPos = xPos;
+                this.yPos = yPos;
+
+            }
+            draw() {
+                ctx.fillRect(this.xPos, this.yPos, this.width, this.height);
+
+            }
+            //paddle x and y corodinate 
+            move(movement) {
+                if (movement == 3 && (this.yPos >= 0)) {
+                    this.yPos -= 1;//move up
+                }
+                else if (movement == 4 && (this.yPos <= canvas.height - this.height)) {
+                    this.yPos += 1;//move down
+                }
+                else if (movement == 1 && (this.xPos >= 0)) {
+                    this.xPos -= 1;//move left
+                }
+                else if (movement == 2 && (this.xPos <= canvas.width - this.width)) {
+                    this.xPos += 1;//move right
+                }
+
+            }
+        }
+        class Ball {
+            constructor(xPos, yPos, xVelocity, yVelocity, radius, rotation) {
+                //fields describing the object
+                this.yPos = yPos;
+                this.yVelocity = yVelocity;
+                this.xPos = xPos;
+                this.xVelocity = xVelocity;
+                this.radius = radius;
+                this.rotation = rotation;
+                this.gravity = 0.5;
+            }
+            draw() {
+                //Draw the ball (stroked, not filled).
+                ctx.beginPath();
+                ctx.arc(this.xPos, this.yPos, this.radius, 0, 2 * Math.PI);
+                ctx.stroke();
+            }
+            //rotate takes argument rotate speed
+            rotate(rotateSpeed) {
+                //rotation speed
+                this.rotation += rotateSpeed;
+                //calculate the outer points of the circle for the peace symbol
+                // x= (r*cos(0) + rotation)+ center x position of cirlce
+                // y= (r*sin(0) + rotation)+ center y position of cirlce
+                var y1 = (this.radius * Math.sin((Math.PI / 4) + this.rotation)) + this.yPos;
+                var x1 = (this.radius * Math.cos((Math.PI / 4) + this.rotation)) + this.xPos;
+                var y2 = (this.radius * Math.sin((3 * Math.PI / 4) + this.rotation)) + this.yPos;
+                var x2 = (this.radius * Math.cos((3 * Math.PI / 4) + this.rotation)) + this.xPos;
+                var y3 = (this.radius * Math.sin((Math.PI / 2) + this.rotation)) + this.yPos;
+                var x3 = (this.radius * Math.cos((Math.PI / 2) + this.rotation)) + this.xPos;
+                var y4 = (this.radius * Math.sin((6 * Math.PI / 4) + this.rotation)) + this.yPos;
+                var x4 = (this.radius * Math.cos((6 * Math.PI / 4) + this.rotation)) + this.xPos;
+                //move pen to center of cirlce
+                ctx.moveTo(this.xPos, this.yPos);
+                //draw line to outside point 1
+                ctx.lineTo(x1, y1);
+                ctx.moveTo(this.xPos, this.yPos);
+                //draw line to outside point 2
+                ctx.lineTo(x2, y2);
+                ctx.moveTo(this.xPos, this.yPos);
+                //draw line to outside point 3
+                ctx.lineTo(x3, y3);
+                ctx.moveTo(this.xPos, this.yPos);
+                //draw line to outside point 4
+                ctx.lineTo(x4, y4);
+                ctx.stroke();
+            }
+            move() {
+                // Update the y and x location.
+                this.yVelocity += this.gravity;
+                this.yPos += this.yVelocity;
+                this.xPos += this.xVelocity;
+
+                // Reverse ball direction on contact with bottom
+                if (this.yPos >= canvas.height - this.radius) {
+                    //prevent gravity acceleration pushing the ball down
+                    this.yPos = canvas.height - this.radius;
+                    //90% speed after bouncing
+                    this.yVelocity *= -0.9;
+                }
+                // Reverse ball direction on contact with top
+                else if (this.yPos <= this.radius) {
+                    //reset the ball to prevent going through the top
+                    this.yPos = this.radius;
+                    //90% speed after bouncing
+                    this.yVelocity *= -0.9;
+                }
+                // Bounce from side to side
+                if (this.xPos >= canvas.width - this.radius) {
+                    this.xPos = canvas.width - this.radius;
+                    this.xVelocity *= -0.9;
+                    console.log(this.xVelocity);
+                }
+                else if (this.xPos <= this.radius) {
+                    this.xPos = this.radius;
+                    this.xVelocity *= -0.9;
+                    console.log(this.xVelocity);
+                }
+            }
+        }
+        //create object myball
+        myBall = new Ball(50, 49, 1, 1, 49, 0);
+        myPaddle = new Paddle(26, 100, 25, 25);
+        myPaddle2 = new Paddle(26, 100, 25, 450);
+        var rotateSpeed = 0.025;
+        var mousePosition;
+        //Add a Javascript event listener to the keypress event.
+        window.addEventListener("keypress", function (event) {
+            // Just log the event to the console.
+            console.log(event);
+        });
+        //keypresses with jQuery
+        $(document.body).on('keydown', function (e) {
+            console.log(e.which);
+            switch (e.which) {
+                // key code for left arrow
+                case 37:
+                    myPaddle.move(1);
+                    console.log('left arrow key pressed!');
+                    break;
+                //key code for up arrow
+                case 38:
+                    myPaddle.move(3);
+                    console.log('up arrow pressed');
+                    break;
+                // key code for right arrow
+                case 39:
+                    myPaddle.move(2);
+                    console.log('right arrow key pressed!');
+                    break;
+                // key code for down arrow
+                case 40:
+                    myPaddle.move(4);
+                    console.log('down arrow pressed');
+                    break;
+                case 65:
+                    myPaddle2.move(1);
+                    console.log('left arrow key pressed!');
+                    break;
+                //Second Paddle
+                //W
+                case 87:
+                    myPaddle2.move(3);
+                    console.log('up arrow pressed');
+                    break;
+                //D
+                case 68:
+                    myPaddle2.move(2);
+                    console.log('right arrow key pressed!');
+                    break;
+                //S
+                case 83:
+                    myPaddle2.move(4);
+                    console.log('down arrow pressed');
+                //Rotation
+                //z
+                case 90:
+                    //slow down/invert rotatespeed
+                    //if statement to prevent inverse rotation
+                    if (rotateSpeed > 0) {
+                        rotateSpeed = rotateSpeed - 0.025;
+                        //if speed is below the cap set it to the cap
+                        if (rotateSpeed < 0) {
+                            rotateSpeed = 0;
+                        }
+                    }
+                    console.log(rotateSpeed);
+                    break;
+                //x
+                case 88:
+                    //increase rotate speed
+                    //if statement for rotation cap
+                    if (rotateSpeed < 0.1) {
+                        rotateSpeed = rotateSpeed + 0.025;
+                        //if speed is above the cap set it to the cap
+                        if (rotateSpeed > 0.1) {
+                            rotateSpeed = 0.1;
+                        }
+                    }
+                    console.log(rotateSpeed);
+                    break;
+            }
+        });
+        //listen for mouse movement in y 
+        canvas.addEventListener("mousemove", function (event) {
+            mousePosition = event.clientY - canvas.offsetTop;
+            if (mousePosition >= 0 && mousePosition <= canvas.height - myPaddle.height) {
+                myPaddle.yPos = mousePosition
+            }
+        });
+
+        function repeatme() {
+            //clear canvas every frame
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            myPaddle2.draw();
+            myPaddle.draw();
+            myBall.draw();
+            myBall.rotate(rotateSpeed);
+            myBall.move();
+            window.requestAnimationFrame(repeatme);
+        }
+        // Get the animation going.
+        repeatme();
+    </script>
+</body>
+
+</html>
