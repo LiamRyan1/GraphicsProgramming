@@ -46,10 +46,10 @@
             //paddle x and y corodinate 
             move(movement) {
                 if (movement == 3 && (this.yPos >= this.width)) {
-                    this.yPos -= 1;//move up
+                    this.yPos -= 10;//move up
                 }
                 else if (movement == 4 && (this.yPos <= canvas.height - this.width)) {
-                    this.yPos += 1;//move down
+                    this.yPos += 10;//move down
                 }
                 else if (movement == 1 && (this.xPos >= this.width)) {
                     this.xPos -= 1;//move left
@@ -69,7 +69,7 @@
                 this.xVelocity = xVelocity;
                 this.radius = radius;
                 this.rotation = rotation;
-                this.gravity = 0.5;
+                this.gravity = 0;
             }
             draw() {
                 //Draw the ball (stroked, not filled).
@@ -139,9 +139,30 @@
                     console.log(this.xVelocity);
                 }
             }
+            collision(){
+            var leftCollision = Math.sqrt(Math.pow(this.xPos-myPaddle.xPos,2)+Math.pow(this.yPos-myPaddle.yPos,2));
+            var rightCollision = Math.sqrt(Math.pow(this.xPos-myPaddle2.xPos,2)+Math.pow(this.yPos-myPaddle2.yPos,2));
+            if(leftCollision <= (this.radius+myPaddle.width))
+            {
+                
+                this.xVelocity = this.xVelocity * -1;
+            
+                this.xPos += this.xVelocity*1;
+              
+                console.log("Collision detected left");
+            }
+            else if (rightCollision <= (this.radius+myPaddle2.width))
+            {
+                this.xVelocity = this.xVelocity * -1;
+        
+                this.xPos = this.xPos + this.xVelocity*1;
+                
+                console.log("Collision detected right");
+            }
+        }
         }
         //create object myball
-        myBall = new Ball(50, 49, 1, 1, 49, 0);
+        myBall = new Ball(250, 249, 15, 15, 49, 0);
         myPaddle = new Paddle(26, 100, 50);
         myPaddle2 = new Paddle(26, 100, 450);
         var rotateSpeed = 0.025;
@@ -230,7 +251,6 @@
                 myPaddle.yPos = mousePosition
             }
         });
-
         function repeatme() {
             //clear canvas every frame
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -239,6 +259,7 @@
             myBall.draw();
             myBall.rotate(rotateSpeed);
             myBall.move();
+            myBall.collision();
             window.requestAnimationFrame(repeatme);
         }
         // Get the animation going.
