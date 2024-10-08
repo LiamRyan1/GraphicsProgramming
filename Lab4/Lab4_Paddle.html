@@ -31,26 +31,27 @@
 
         class Paddle {
             //class attributes for paddle
-            constructor(width, height, yPos, xPos) {
+            constructor(width, yPos, xPos) {
                 this.width = width;
-                this.height = height;
                 this.xPos = xPos;
                 this.yPos = yPos;
 
             }
             draw() {
-                ctx.fillRect(this.xPos, this.yPos, this.width, this.height);
+                ctx.beginPath();
+                ctx.arc(this.xPos,this.yPos,this.width,0,2 * Math.PI);
+                ctx.stroke();
 
             }
             //paddle x and y corodinate 
             move(movement) {
-                if (movement == 3 && (this.yPos >= 0)) {
+                if (movement == 3 && (this.yPos >= this.width)) {
                     this.yPos -= 1;//move up
                 }
-                else if (movement == 4 && (this.yPos <= canvas.height - this.height)) {
+                else if (movement == 4 && (this.yPos <= canvas.height - this.width)) {
                     this.yPos += 1;//move down
                 }
-                else if (movement == 1 && (this.xPos >= 0)) {
+                else if (movement == 1 && (this.xPos >= this.width)) {
                     this.xPos -= 1;//move left
                 }
                 else if (movement == 2 && (this.xPos <= canvas.width - this.width)) {
@@ -141,8 +142,8 @@
         }
         //create object myball
         myBall = new Ball(50, 49, 1, 1, 49, 0);
-        myPaddle = new Paddle(26, 100, 25, 25);
-        myPaddle2 = new Paddle(26, 100, 25, 450);
+        myPaddle = new Paddle(26, 100, 50);
+        myPaddle2 = new Paddle(26, 100, 450);
         var rotateSpeed = 0.025;
         var mousePosition;
         //Add a Javascript event listener to the keypress event.
@@ -225,7 +226,7 @@
         //listen for mouse movement in y 
         canvas.addEventListener("mousemove", function (event) {
             mousePosition = event.clientY - canvas.offsetTop;
-            if (mousePosition >= 0 && mousePosition <= canvas.height - myPaddle.height) {
+            if (mousePosition >= myPaddle.width && mousePosition <= canvas.height - myPaddle.width) {
                 myPaddle.yPos = mousePosition
             }
         });
