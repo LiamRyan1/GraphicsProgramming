@@ -35,6 +35,7 @@
                 this.width = width;
                 this.xPos = xPos;
                 this.yPos = yPos;
+                this.score = 0;//start score 0
 
             }
             draw() {
@@ -133,11 +134,17 @@
                 if (this.xPos >= canvas.width - this.radius) {
                     this.xPos = canvas.width - this.radius;
                     this.xVelocity *= -0.9;
+                    if (myPaddle2.score > 0) {
+                        myPaddle2.score--; //decrement score;
+                    }
                     console.log(this.xVelocity);
                 }
                 else if (this.xPos <= this.radius) {
                     this.xPos = this.radius;
                     this.xVelocity *= -0.9;
+                    if (myPaddle.score > 0) {
+                        myPaddle.score--; //decrement score;
+                    }
                     console.log(this.xVelocity);
                 }
             }
@@ -147,15 +154,15 @@
                 var rightCollision = Math.sqrt(Math.pow(this.xPos - myPaddle2.xPos, 2) + Math.pow(this.yPos - myPaddle2.yPos, 2));
                 if (leftCollision <= (this.radius + myPaddle.width)) {
 
-                     this.xVelocity = this.xVelocity * -1;//invert the direction of travel
-                     this.xPos += this.xVelocity*1;
-
+                    this.xVelocity = this.xVelocity * -1;//invert the direction of travel
+                    this.xPos += this.xVelocity * 1;
+                    myPaddle.score++;//increment score on collision
                     this.collisionMessage("Collision detected left");
                 }
                 else if (rightCollision <= (this.radius + myPaddle2.width)) {
-                     this.xVelocity = this.xVelocity * -1;//invert the direction of travel
-                     this.xPos = this.xPos + this.xVelocity*1;//add distance so that the ball can escape contact
-
+                    this.xVelocity = this.xVelocity * -1;//invert the direction of travel
+                    this.xPos = this.xPos + this.xVelocity * 1;//add distance so that the ball can escape contact
+                    myPaddle2.score++;//increment score on collision
                     this.collisionMessage("Collision detected right");
                 }
             }
@@ -173,6 +180,13 @@
                     ctx.textAlign = "center";
                     ctx.fillText(this.msg, canvas.width / 2, canvas.height / 2);
                 }
+                ctx.font = "30px times new roman";
+                ctx.fillStyle = "black";
+                ctx.textAlign = "center";
+                let score1 = String(myPaddle.score).padStart(3, '0');//ensures score is 3 digits in length when score is less than 3 digits replaces missing digits with 0
+                let score2 = String(myPaddle2.score).padStart(3, '0');
+                ctx.fillText("Score 1:" + score1, 125, 50);
+                ctx.fillText("Score 2:" + score2, 300, 50);
 
             }
         }
