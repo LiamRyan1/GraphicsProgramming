@@ -77,7 +77,9 @@
             draw() {
                 //Draw the ball (stroked, not filled).
                 ctx.beginPath();
+                ctx.fillStyle = "red";
                 ctx.arc(this.xPos, this.yPos, this.radius, 0, 2 * Math.PI);
+                ctx.fill();
                 ctx.stroke();
             }
             //rotate takes argument rotate speed
