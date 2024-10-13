@@ -142,18 +142,19 @@
                 }
             }
             collision() {
+                //distance between ball and paddles
                 var leftCollision = Math.sqrt(Math.pow(this.xPos - myPaddle.xPos, 2) + Math.pow(this.yPos - myPaddle.yPos, 2));
                 var rightCollision = Math.sqrt(Math.pow(this.xPos - myPaddle2.xPos, 2) + Math.pow(this.yPos - myPaddle2.yPos, 2));
                 if (leftCollision <= (this.radius + myPaddle.width)) {
 
-                    // this.xVelocity = this.xVelocity * -1;
-                    // this.xPos += this.xVelocity*1;
+                     this.xVelocity = this.xVelocity * -1;//invert the direction of travel
+                     this.xPos += this.xVelocity*1;
 
                     this.collisionMessage("Collision detected left");
                 }
                 else if (rightCollision <= (this.radius + myPaddle2.width)) {
-                    // this.xVelocity = this.xVelocity * -1;
-                    // this.xPos = this.xPos + this.xVelocity*1;
+                     this.xVelocity = this.xVelocity * -1;//invert the direction of travel
+                     this.xPos = this.xPos + this.xVelocity*1;//add distance so that the ball can escape contact
 
                     this.collisionMessage("Collision detected right");
                 }
