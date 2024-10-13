@@ -39,7 +39,7 @@
             }
             draw() {
                 ctx.beginPath();
-                ctx.arc(this.xPos,this.yPos,this.width,0,2 * Math.PI);
+                ctx.arc(this.xPos, this.yPos, this.width, 0, 2 * Math.PI);
                 ctx.stroke();
 
             }
@@ -70,6 +70,8 @@
                 this.radius = radius;
                 this.rotation = rotation;
                 this.gravity = 0;
+                this.msg = "";
+                this.msgTime = null;
             }
             draw() {
                 //Draw the ball (stroked, not filled).
@@ -139,26 +141,41 @@
                     console.log(this.xVelocity);
                 }
             }
-            collision(){
-            var leftCollision = Math.sqrt(Math.pow(this.xPos-myPaddle.xPos,2)+Math.pow(this.yPos-myPaddle.yPos,2));
-            var rightCollision = Math.sqrt(Math.pow(this.xPos-myPaddle2.xPos,2)+Math.pow(this.yPos-myPaddle2.yPos,2));
-            if(leftCollision <= (this.radius+myPaddle.width))
-            {
-                
-               // this.xVelocity = this.xVelocity * -1;
-               // this.xPos += this.xVelocity*1;
-              
-                console.log("Collision detected left");
+            collision() {
+                var leftCollision = Math.sqrt(Math.pow(this.xPos - myPaddle.xPos, 2) + Math.pow(this.yPos - myPaddle.yPos, 2));
+                var rightCollision = Math.sqrt(Math.pow(this.xPos - myPaddle2.xPos, 2) + Math.pow(this.yPos - myPaddle2.yPos, 2));
+                if (leftCollision <= (this.radius + myPaddle.width)) {
+
+                    // this.xVelocity = this.xVelocity * -1;
+                    // this.xPos += this.xVelocity*1;
+
+                    this.collisionMessage("Collision detected left");
+                }
+                else if (rightCollision <= (this.radius + myPaddle2.width)) {
+                    // this.xVelocity = this.xVelocity * -1;
+                    // this.xPos = this.xPos + this.xVelocity*1;
+
+                    this.collisionMessage("Collision detected right");
+                }
             }
-            else if (rightCollision <= (this.radius+myPaddle2.width))
-            {
-               // this.xVelocity = this.xVelocity * -1;
-               // this.xPos = this.xPos + this.xVelocity*1;
-                
-                console.log("Collision detected right");
+            collisionMessage(newMsg) {
+                this.msg = newMsg;
+                if (this.msgTime) clearTimeout(this.msgTime);//checks if a msg timer is already active if there is clears it
+                this.msgTime = setTimeout(() => {//runs the following code after the delay 
+                    this.msg = ""; // Clear the message after 0.75 seconds
+                }, 750);//delay in miliseconds
+            }
+            drawMsg() {
+                if (this.msg) {//checks if the msg variable contains anything if it does print in the center of the canvas
+                    ctx.font = "30px times new roman";
+                    ctx.fillStyle = "black";
+                    ctx.textAlign = "center";
+                    ctx.fillText(this.msg, canvas.width / 2, canvas.height / 2);
+                }
+
             }
         }
-        }
+
         //create object myball
         myBall = new Ball(250, 249, 15, 15, 49, 0);
         myPaddle = new Paddle(26, 100, 50);
@@ -258,6 +275,7 @@
             myBall.rotate(rotateSpeed);
             myBall.move();
             myBall.collision();
+            myBall.drawMsg();
             window.requestAnimationFrame(repeatme);
         }
         // Get the animation going.
