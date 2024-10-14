@@ -193,16 +193,42 @@
             }
         }
 
-        //create object myball
-        myBall = new Ball(250, 249, 15, 15, 49, 0);
+        //create array myball and push the first ball to it
+        var myBallArray = [];
+        myBallArray.push(new Ball(250, 249, 15, 15, 49, 0));
         myPaddle = new Paddle(26, 100, 50);
         myPaddle2 = new Paddle(26, 100, 450);
         var rotateSpeed = 0.025;
         var speed = 0.1;
         var mousePosition;
+
+        //listen for double click
+        canvas.addEventListener("dblclick", function (event) {
+            //add a new ball
+            var newBall = new Ball(Math.random() * canvas.width, Math.random() * canvas.height, 15, 15, 49, 0);
+            myBallArray.push(newBall);
+        });
+        //delete on click of ball
+        canvas.addEventListener("click", function (event) {
+            //find mouses position on canvas
+            var mouseXPos = event.clientX - canvas.offsetLeft;
+            var mouseYPos = event.clientY - canvas.offsetTop;
+            //loop throught the ball array
+            for (var i = 0; i < myBallArray.length; i++) {
+                var removedBall = myBallArray[i];
+                //calculate clicks distance from balls center point
+                var distance = Math.sqrt(Math.pow(mouseXPos - removedBall.xPos, 2) + Math.pow(mouseYPos - removedBall.yPos, 2));
+                //check if balls within the circle 
+                if (distance <= removedBall.radius) {
+                    //delete ball if click is inside
+                    myBallArray.splice(i, 1);
+                    break;
+                }
+            }
+        });
         //Add a Javascript event listener to the keypress event.
         window.addEventListener("keypress", function (event) {
-            // Just log the event to the console.
+            //Just log the event to the console.
             console.log(event);
         });
         //keypresses with jQuery
@@ -314,11 +340,14 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             myPaddle2.draw();
             myPaddle.draw();
-            myBall.draw();
-            myBall.rotate(rotateSpeed);
-            myBall.move(speed);
-            myBall.collision();
-            myBall.drawMsg();
+            for (var i = 0; i < myBallArray.length; i++) {
+                var myBalls = myBallArray[i];
+                myBalls.draw();
+                myBalls.rotate(rotateSpeed);
+                myBalls.move(speed);
+                myBalls.collision();
+                myBalls.drawMsg();
+            }
             window.requestAnimationFrame(repeatme);
         }
         // Get the animation going.
