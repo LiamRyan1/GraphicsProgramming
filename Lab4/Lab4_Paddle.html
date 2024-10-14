@@ -38,7 +38,7 @@
                 this.score = 0;//start score 0
 
             }
-            draw() {
+            draw() {//draws paddle
                 ctx.beginPath();
                 ctx.arc(this.xPos, this.yPos, this.width, 0, 2 * Math.PI);
                 ctx.stroke();
@@ -340,6 +340,7 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             myPaddle2.draw();
             myPaddle.draw();
+            //loops through ball array
             for (var i = 0; i < myBallArray.length; i++) {
                 var myBalls = myBallArray[i];
                 myBalls.draw();
