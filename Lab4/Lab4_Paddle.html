@@ -115,11 +115,8 @@
             move(speed) {
                 // Update the y and x location.
                 this.yVelocity += this.gravity;
-                //speed controls no working  as intended
-                this.xVelocity += speed;
-                this.yVelocity += speed;
-                this.yPos += this.yVelocity;
-                this.xPos += this.xVelocity;
+                this.yPos += this.yVelocity * speed;
+                this.xPos += this.xVelocity * speed;
 
                 // Reverse ball direction on contact with bottom
                 if (this.yPos >= canvas.height - this.radius) {
@@ -201,7 +198,7 @@
         myPaddle = new Paddle(26, 100, 50);
         myPaddle2 = new Paddle(26, 100, 450);
         var rotateSpeed = 0.025;
-        var speed = 0;
+        var speed = 0.1;
         var mousePosition;
         //Add a Javascript event listener to the keypress event.
         window.addEventListener("keypress", function (event) {
@@ -290,16 +287,18 @@
                             speed = 0.1;
                         }
                     }
+                    console.log(speed);
                     break;
                 //q
                 case 81:
                     //decrease speed
                     if (speed > 0) {
-                        speed -= 0.1;
+                        speed -= 0.025;
                         if (speed < 0) {
                             speed = 0;
                         }
                     }
+                    console.log(speed);
                     break;
             }
         });
