@@ -12,9 +12,23 @@
 
 <body>
     <script type="text/javascript">
+
+        class Sphere {
+            constructor(radius, segmentWidth, segmentHeight, wireframeOn) {
+                this.radius = radius;
+                this.segmentWidth = segmentWidth;
+                this.segmentHeight = segmentHeight;
+                this.wireframeOn = wireframeOn;
+                this.geometry = new THREE.SphereGeometry(this.radius, this.segmentWidth, this.segmentHeight);
+                this.material = new THREE.MeshLambertMaterial({ color: 0xffff00, wireframe: this.wireframeOn });
+                this.sphere = new THREE.Mesh(this.geometry, this.material);
+                scene.add(this.sphere);
+            }
+
+
+        }
         // Implement scene - Create a Three.js scene to hold objects.
         var scene = new THREE.Scene();
-
         // Create a camera with specified properties.
         var camera = new THREE.PerspectiveCamera(76, window.innerWidth / window.innerHeight, 0.1, 1000);
         // Set camera position
@@ -23,28 +37,19 @@
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
-        //sphere created and added to scene
-        const geometry = new THREE.SphereGeometry(15, 32, 16);
-        const material = new THREE.MeshLambertMaterial({ color: 0xffff00, wireframe: false});
-        const sphere = new THREE.Mesh(geometry, material);
-        scene.add(sphere);
         //spotlight added
         var spotLight = new THREE.SpotLight(0xffffff);
         spotLight.position.set(50, 50, 50);
         scene.add(spotLight);
+        //sphere added
+        mySphere = new Sphere(15, 32, 16, false);
 
         //repeatme
         var repeatme = function () {
             //renderer
             renderer.render(scene, camera);
-            //Code to rotate sphere
-            sphere.rotation.x += 0.01;
-            sphere.rotation.y += 0.01;
-            //move ball to side
-            sphere.position.x += 0.1;
-        
             requestAnimationFrame(repeatme)
-            
+
         }
         repeatme();
 
