@@ -25,9 +25,14 @@
         document.body.appendChild(renderer.domElement);
         //sphere created and added to scene
         const geometry = new THREE.SphereGeometry(15, 32, 16);
-        const material = new THREE.MeshBasicMaterial({ color: 0xffff00, wireframe: true});
+        const material = new THREE.MeshBasicMaterial({ color: 0xffff00, wireframe: false});
         const sphere = new THREE.Mesh(geometry, material);
         scene.add(sphere);
+        //spotlight added
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(50, 50, 50);
+        scene.add(spotLight);
+
         //repeatme
         var repeatme = function () {
             //renderer
