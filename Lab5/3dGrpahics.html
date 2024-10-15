@@ -24,6 +24,13 @@
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
                 scene.add(this.sphere);
             }
+            move() {
+                //Code to rotate sphere
+                this.sphere.rotation.x += 0.01;
+                this.sphere.rotation.y += 0.01;
+                //send to the right
+                this.sphere.position.x += 0.1;
+            }
 
 
         }
@@ -48,6 +55,7 @@
         var repeatme = function () {
             //renderer
             renderer.render(scene, camera);
+            mySphere.move();
             requestAnimationFrame(repeatme)
 
         }
