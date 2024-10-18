@@ -50,12 +50,13 @@
         scene.add(spotLight);
         //sphere added
         mySphere = new Sphere(15, 32, 16, false);
-
+        mySphere2 = new Sphere(18,35,17,true);
         //repeatme
         var repeatme = function () {
             //renderer
             renderer.render(scene, camera);
             mySphere.move();
+            mySphere2.move();
             requestAnimationFrame(repeatme)
 
         }
