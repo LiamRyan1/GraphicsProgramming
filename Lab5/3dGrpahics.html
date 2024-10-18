@@ -20,6 +20,7 @@
                 this.segmentHeight = segmentHeight;
                 this.wireframeOn = wireframeOn;
                 this.velocityX = velocityX;
+                this.velocityY = velocityY;
                 this.box = box;
                 this.plane = plane;
                 this.geometry = new THREE.SphereGeometry(this.radius, this.segmentWidth, this.segmentHeight);
@@ -34,10 +35,9 @@
                 //Code to rotate sphere
                 this.sphere.rotation.x += 0.01;
                 this.sphere.rotation.y += 0.01;
-
            
                 this.sphere.position.x += this.velocityX;
-                this.sphere.position.y -= this.velocityY;
+                this.sphere.position.y += this.velocityY;
 
                 //check collision with the walls of the box and reverse direction if necessary
                 const halfBoxWidth = this.box.width / 2;
