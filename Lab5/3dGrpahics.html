@@ -14,11 +14,13 @@
     <script type="text/javascript">
 
         class Sphere {
-            constructor(radius, segmentWidth, segmentHeight, wireframeOn) {
+            constructor(radius, segmentWidth, segmentHeight, wireframeOn,velocityX,box) {
                 this.radius = radius;
                 this.segmentWidth = segmentWidth;
                 this.segmentHeight = segmentHeight;
                 this.wireframeOn = wireframeOn;
+                this.velocityX = velocityX;
+                this.box = box;
                 this.geometry = new THREE.SphereGeometry(this.radius, this.segmentWidth, this.segmentHeight);
                 this.material = new THREE.MeshLambertMaterial({ color: 0xffff00, wireframe: this.wireframeOn });
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
@@ -28,11 +30,32 @@
                 //Code to rotate sphere
                 this.sphere.rotation.x += 0.01;
                 this.sphere.rotation.y += 0.01;
-                //send to the right
-                this.sphere.position.x += 0.1;
+               
+
+                //move the sphere in the x-axis
+                this.sphere.position.x += this.velocityX;
+
+                //check collision with the walls of the box and reverse direction if necessary
+                const halfBoxWidth = this.box.width / 2;
+                const sphereRadius = this.radius;
+
+                if (this.sphere.position.x + sphereRadius > halfBoxWidth || this.sphere.position.x - sphereRadius < -halfBoxWidth) {
+                    // reverse the direction of movement
+                    this.velocityX = -this.velocityX;
+                }
             }
-
-
+        }
+        class box {
+            constructor(height,width,depth,wireframeOn) {
+                this.height = height;
+                this.width = width;
+                this.depth = depth;
+                this.wireframeOn = wireframeOn;
+                this.geometry = new THREE.BoxGeometry(this.width, this.height, this.depth);
+                this.material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: this.wireframeOn });
+                this.cube = new THREE.Mesh(this.geometry, this.material);
+                scene.add(this.cube);
+            }
         }
         // Implement scene - Create a Three.js scene to hold objects.
         var scene = new THREE.Scene();
@@ -48,9 +71,11 @@
         var spotLight = new THREE.SpotLight(0xffffff);
         spotLight.position.set(50, 50, 50);
         scene.add(spotLight);
+        //cube added
+        myCube = new box(100,100,100,true);
         //sphere added
-        mySphere = new Sphere(15, 32, 16, false);
-        mySphere2 = new Sphere(18,35,17,true);
+        mySphere = new Sphere(15, 32, 16, false,1,myCube);
+        mySphere2 = new Sphere(18, 35, 17, true,1,myCube);
         //repeatme
         var repeatme = function () {
             //renderer
