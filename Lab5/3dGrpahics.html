@@ -14,37 +14,56 @@
     <script type="text/javascript">
 
         class Sphere {
-            constructor(radius, segmentWidth, segmentHeight, wireframeOn, velocityX, box) {
+            constructor(radius, segmentWidth, segmentHeight, wireframeOn, velocityX, velocityY, box, plane) {
                 this.radius = radius;
                 this.segmentWidth = segmentWidth;
                 this.segmentHeight = segmentHeight;
                 this.wireframeOn = wireframeOn;
                 this.velocityX = velocityX;
                 this.box = box;
+                this.plane = plane;
                 this.geometry = new THREE.SphereGeometry(this.radius, this.segmentWidth, this.segmentHeight);
                 this.material = new THREE.MeshLambertMaterial({ color: 0xffff00, wireframe: this.wireframeOn });
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
+                this.sphere.castShadow = true;//turn shadow on
                 scene.add(this.sphere);
+                //intial sphere position
+                this.sphere.position.set(0, 10, 0);
             }
             move() {
                 //Code to rotate sphere
                 this.sphere.rotation.x += 0.01;
                 this.sphere.rotation.y += 0.01;
 
-
-                //move the sphere in the x-axis
+           
                 this.sphere.position.x += this.velocityX;
+                this.sphere.position.y -= this.velocityY;
 
                 //check collision with the walls of the box and reverse direction if necessary
                 const halfBoxWidth = this.box.width / 2;
+                const halfBoxHeight = this.box.height / 2;
                 const sphereRadius = this.radius;
-
+                //check for collision with the walls
                 if (this.sphere.position.x + sphereRadius > halfBoxWidth || this.sphere.position.x - sphereRadius < -halfBoxWidth) {
-                    // reverse the direction of movement
+                    //reverse the direction of movement
                     this.velocityX = -this.velocityX;
+                    console.log("Collided with box wall.");
+                }
+                // Check collision with the plane
+                if (this.sphere.position.y - sphereRadius <= this.plane.plane.position.y) {//first plane gives the sphere class access to the instance of plane second plane accesses the mesh attribute 
+                    this.sphere.position.y = this.plane.plane.position.y + sphereRadius; //ensure sphere is above plane
+                    this.velocityY = -this.velocityY; //reverse the Y velocity
+                    console.log("Collided with the plane.");
+                }
+                if (this.sphere.position.y + sphereRadius > halfBoxHeight) {
+                    //reverse the Y velocity and ensure the sphere is below the box top
+                    this.sphere.position.y = halfBoxHeight - sphereRadius; //change position to be at the top of the box
+                    this.velocityY = -this.velocityY; //reverse the Y velocity
+                    console.log("Collided with the top of the box.");
                 }
             }
-        }
+
+            }
         class box {
             constructor(height, width, depth, wireframeOn) {
                 this.height = height;
@@ -58,7 +77,7 @@
             }
         }
         class plane {
-            constructor(width,height,box) {
+            constructor(width, height, box) {
                 this.box = box;
                 this.width = width;
                 this.height = height;
@@ -67,8 +86,9 @@
                 this.plane = new THREE.Mesh(this.geometry, this.material);
 
                 //ensure plane is at the bottom of the cube
-                this.plane.position.set(0,((this.box.width/2-1)*-1),0);//plane appear slightly above the bottom of the cube
+                this.plane.position.set(0, ((this.box.width / 2 + 1) * -1), 0);//plane appear slightly above the bottom of the cube
                 this.plane.rotation.x = Math.PI / 2; //rotate 90 degrees from its default position to lay flat
+                this.plane.receiveShadow = true;
                 scene.add(this.plane);
             }
         }
@@ -86,7 +106,7 @@
         document.body.appendChild(renderer.domElement);
         //spotlight added
         var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(20, 20, 20);
+        spotLight.position.set(100, 100, 100);
         spotLight.castShadow = true;
         scene.add(spotLight);
         //Helper for directional light
@@ -94,17 +114,15 @@
         scene.add(helper);
         //cube added
         myCube = new box(50, 50, 50, true);
-        //sphere added
-        mySphere = new Sphere(15, 32, 16, false, 1, myCube);
-        mySphere2 = new Sphere(18, 35, 17, true, 1, myCube);
         //plane added
-        myPlane = new plane(50,50,myCube);
+        myPlane = new plane(50, 50, myCube);
+        //sphere added
+        mySphere = new Sphere(15, 32, 16, false, 1, 0.05, myCube, myPlane);
         //repeatme
         var repeatme = function () {
             //renderer
             renderer.render(scene, camera);
             mySphere.move();
-            mySphere2.move();
             requestAnimationFrame(repeatme)
 
         }
