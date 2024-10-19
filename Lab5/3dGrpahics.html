@@ -61,6 +61,8 @@
                     this.velocityY = -this.velocityY; //reverse the Y velocity
                     console.log("Collided with the top of the box.");
                 }
+
+                //colliision between spheres
             }
 
             }
@@ -117,12 +119,14 @@
         //plane added
         myPlane = new plane(50, 50, myCube);
         //sphere added
-        mySphere = new Sphere(15, 32, 16, false, 1, 0.05, myCube, myPlane);
+        mySphere = new Sphere(5, 32, 16, false, 1, 1, myCube, myPlane);
+        mySphere2 = new Sphere(5, 32, 16, false, 1, 1, myCube, myPlane);
         //repeatme
         var repeatme = function () {
             //renderer
             renderer.render(scene, camera);
             mySphere.move();
+            mySphere2.move();
             requestAnimationFrame(repeatme)
 
         }
