@@ -25,41 +25,49 @@
                 this.plane = plane;
                 this.position = position;
                 this.gravity = 0.005;
+
+
                 this.geometry = new THREE.SphereGeometry(this.radius, this.segmentWidth, this.segmentHeight);
                 this.material = new THREE.MeshLambertMaterial({ color: 0xffff00, wireframe: this.wireframeOn });
+                this.wireFrameMaterial =  new THREE.MeshBasicMaterial( { color: 0x000000 ,wireframe:true } ); 
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
+                this.wireSphere = new THREE.Mesh(this.geometry,this.wireFrameMaterial);
+                //https://threejs.org/docs/#api/en/objects/Group how to group objects together
+                this.sphereGroup = new THREE.Group();
+                this.sphereGroup.add(this.sphere);
+                this.sphereGroup.add(this.wireSphere);
                 this.sphere.castShadow = true;//turn shadow on
-                scene.add(this.sphere);
+                scene.add(this.sphereGroup);
                 //intial sphere position
-                this.sphere.position.set(0, this.position, 0);
+                this.sphereGroup.position.set(0, this.position, 0);
             }
             move(otherBall) {
                 //Code to rotate sphere
-                this.sphere.rotation.x += 0.01;
-                this.sphere.rotation.y += 0.01;
+                this.sphereGroup.rotation.x += 0.01;
+                this.sphereGroup.rotation.y += 0.01;
                 this.velocityY -= this.gravity;
-                this.sphere.position.x += this.velocityX;
-                this.sphere.position.y += this.velocityY;
+                this.sphereGroup.position.x += this.velocityX;
+                this.sphereGroup.position.y += this.velocityY;
 
                 //check collision with the walls of the box and reverse direction if necessary
                 const halfBoxWidth = this.box.width / 2;
                 const halfBoxHeight = this.box.height / 2;
                 const sphereRadius = this.radius;
                 //check for collision with the walls
-                if (this.sphere.position.x + sphereRadius > halfBoxWidth || this.sphere.position.x - sphereRadius < -halfBoxWidth) {
+                if (this.sphereGroup.position.x + sphereRadius > halfBoxWidth || this.sphereGroup.position.x - sphereRadius < -halfBoxWidth) {
                     //reverse the direction of movement
                     this.velocityX = -this.velocityX;
                     console.log("Collided with box wall.");
                 }
                 // Check collision with the plane
-                if (this.sphere.position.y - sphereRadius <= this.plane.plane.position.y) {//first plane gives the sphere class access to the instance of plane second plane accesses the mesh attribute 
-                    this.sphere.position.y = this.plane.plane.position.y + sphereRadius; //ensure sphere is above plane
+                if (this.sphereGroup.position.y - sphereRadius <= this.plane.plane.position.y) {//first plane gives the sphere class access to the instance of plane second plane accesses the mesh attribute 
+                    this.sphereGroup.position.y = this.plane.plane.position.y + sphereRadius; //ensure sphere is above plane
                     this.velocityY = -this.velocityY; //reverse the Y velocity
                     console.log("Collided with the plane.");
                 }
-                if (this.sphere.position.y + sphereRadius > halfBoxHeight) {
+                if (this.sphereGroup.position.y + sphereRadius > halfBoxHeight) {
                     //reverse the Y velocity and ensure the sphere is below the box top
-                    this.sphere.position.y = halfBoxHeight - sphereRadius; //change position to be at the top of the box
+                    this.sphereGroup.position.y = halfBoxHeight - sphereRadius; //change position to be at the top of the box
                     this.velocityY = -this.velocityY; //reverse the Y velocity
                     console.log("Collided with the top of the box.");
                 }
@@ -68,7 +76,7 @@
 
                 if (otherBall) {
                     //distance between the spheres
-                    const distance = Math.sqrt(Math.pow(this.sphere.position.x - otherBall.sphere.position.x, 2) + Math.pow(this.sphere.position.y - otherBall.sphere.position.y, 2) + Math.pow(this.sphere.position.z - otherBall.sphere.position.z, 2));
+                    const distance = Math.sqrt(Math.pow(this.sphereGroup.position.x - otherBall.sphereGroup.position.x, 2) + Math.pow(this.sphereGroup.position.y - otherBall.sphereGroup.position.y, 2) + Math.pow(this.sphereGroup.position.z - otherBall.sphereGroup.position.z, 2));
                     //console.log(distance);
                     if (distance < this.radius + otherBall.radius) {
                         //REverse direction
@@ -89,7 +97,7 @@
                 this.depth = depth;
                 this.wireframeOn = wireframeOn;
                 this.geometry = new THREE.BoxGeometry(this.width, this.height, this.depth);
-                this.material = new THREE.MeshLambertMaterial({ color: 0x00ff00, wireframe: this.wireframeOn,transparent:true, opacity:0.5});
+                this.material = new THREE.MeshLambertMaterial({ color: 0x00ff00, wireframe: this.wireframeOn,transparent:true, opacity:0.3});
                 this.cube = new THREE.Mesh(this.geometry, this.material);
                 this.cube.receiveShadow = true;
                 scene.add(this.cube);
