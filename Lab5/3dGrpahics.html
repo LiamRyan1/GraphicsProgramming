@@ -14,7 +14,7 @@
     <script type="text/javascript">
 
         class Sphere {
-            constructor(radius, segmentWidth, segmentHeight, wireframeOn, velocityX, velocityY, box, plane) {
+            constructor(radius, segmentWidth, segmentHeight, wireframeOn, velocityX, velocityY, box, plane,position) {
                 this.radius = radius;
                 this.segmentWidth = segmentWidth;
                 this.segmentHeight = segmentHeight;
@@ -23,19 +23,20 @@
                 this.velocityY = velocityY;
                 this.box = box;
                 this.plane = plane;
+                this.position = position;
                 this.geometry = new THREE.SphereGeometry(this.radius, this.segmentWidth, this.segmentHeight);
                 this.material = new THREE.MeshLambertMaterial({ color: 0xffff00, wireframe: this.wireframeOn });
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
                 this.sphere.castShadow = true;//turn shadow on
                 scene.add(this.sphere);
                 //intial sphere position
-                this.sphere.position.set(0, 10, 0);
+                this.sphere.position.set(0, this.position, 0);
             }
-            move() {
+            move(otherBall) {
                 //Code to rotate sphere
                 this.sphere.rotation.x += 0.01;
                 this.sphere.rotation.y += 0.01;
-           
+
                 this.sphere.position.x += this.velocityX;
                 this.sphere.position.y += this.velocityY;
 
@@ -63,9 +64,22 @@
                 }
 
                 //colliision between spheres
+
+                if (otherBall) {
+                    const distance = Math.sqrt(Math.pow(this.sphere.position.x - otherBall.sphere.position.x, 2) + Math.pow(this.sphere.position.y - otherBall.sphere.position.y, 2) + Math.pow(this.sphere.position.z - otherBall.sphere.position.z, 2));
+                    //console.log(distance);
+                    if (distance < this.radius + otherBall.radius) {
+                        //REverse direction
+                        this.velocityY = -this.velocityY; 
+                        this.velocityX = -this.velocityX;
+                        otherBall.velocityY = -otherBall.velocityY; 
+                        otherBall.velocityX = -otherBall.velocityX;
+                        console.log("Spheres colided");
+                    }
+                }
             }
 
-            }
+        }
         class box {
             constructor(height, width, depth, wireframeOn) {
                 this.height = height;
@@ -119,14 +133,14 @@
         //plane added
         myPlane = new plane(50, 50, myCube);
         //sphere added
-        mySphere = new Sphere(5, 32, 16, false, 1, 1, myCube, myPlane);
-        mySphere2 = new Sphere(5, 32, 16, false, 1, 1, myCube, myPlane);
+        mySphere = new Sphere(5, 32, 16, false, 0.15, 0.15, myCube, myPlane,10);
+        mySphere2 = new Sphere(5, 32, 16, false, -0.2, -0.15, myCube, myPlane,-10);
         //repeatme
         var repeatme = function () {
             //renderer
             renderer.render(scene, camera);
-            mySphere.move();
-            mySphere2.move();
+            mySphere.move(mySphere2);
+            mySphere2.move(mySphere);
             requestAnimationFrame(repeatme)
 
         }
