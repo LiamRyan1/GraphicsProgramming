@@ -14,13 +14,14 @@
     <script type="text/javascript">
 
         class Sphere {
-            constructor(radius, segmentWidth, segmentHeight, wireframeOn, velocityX, velocityY, box, plane,position) {
+            constructor(radius, segmentWidth, segmentHeight, wireframeOn, velocityX, velocityY,velocityZ, box, plane,position) {
                 this.radius = radius;
                 this.segmentWidth = segmentWidth;
                 this.segmentHeight = segmentHeight;
                 this.wireframeOn = wireframeOn;
                 this.velocityX = velocityX;
                 this.velocityY = velocityY;
+                this.velocityZ = velocityZ;
                 this.box = box;
                 this.plane = plane;
                 this.position = position;
@@ -48,10 +49,11 @@
                 this.velocityY -= this.gravity;
                 this.sphereGroup.position.x += this.velocityX;
                 this.sphereGroup.position.y += this.velocityY;
-
+                this.sphereGroup.position.z += this.velocityZ;
                 //check collision with the walls of the box and reverse direction if necessary
                 const halfBoxWidth = this.box.width / 2;
                 const halfBoxHeight = this.box.height / 2;
+                const halfBoxDepth = this.box.depth /2;
                 const sphereRadius = this.radius;
                 //check for collision with the walls
                 if (this.sphereGroup.position.x + sphereRadius > halfBoxWidth || this.sphereGroup.position.x - sphereRadius < -halfBoxWidth) {
@@ -59,16 +61,24 @@
                     this.velocityX = -this.velocityX;
                     console.log("Collided with box wall.");
                 }
+                //check for collision with the walls
+                if (this.sphereGroup.position.z + sphereRadius > halfBoxDepth || this.sphereGroup.position.z - sphereRadius < -halfBoxDepth) {
+                    //reverse the direction of movement
+                    this.velocityZ = -this.velocityZ;
+                    console.log("Collided with box front or back wall.");
+                }
                 // Check collision with the plane
                 if (this.sphereGroup.position.y - sphereRadius <= this.plane.plane.position.y) {//first plane gives the sphere class access to the instance of plane second plane accesses the mesh attribute 
                     this.sphereGroup.position.y = this.plane.plane.position.y + sphereRadius; //ensure sphere is above plane
                     this.velocityY = -this.velocityY; //reverse the Y velocity
+                    this.velocityZ = -this.velocityZ;
                     console.log("Collided with the plane.");
                 }
                 if (this.sphereGroup.position.y + sphereRadius > halfBoxHeight) {
                     //reverse the Y velocity and ensure the sphere is below the box top
                     this.sphereGroup.position.y = halfBoxHeight - sphereRadius; //change position to be at the top of the box
                     this.velocityY = -this.velocityY; //reverse the Y velocity
+                    this.velocityZ = -this.velocityZ;
                     console.log("Collided with the top of the box.");
                 }
 
@@ -143,8 +153,8 @@
         //plane added
         myPlane = new plane(50, 50, myCube);
         //sphere added
-        mySphere = new Sphere(5, 32, 16, false, 0.15, 0.15, myCube, myPlane,10);
-        mySphere2 = new Sphere(5, 32, 16, false, -0.3, -0.15, myCube, myPlane,-10);
+        mySphere = new Sphere(5, 32, 16, false, 0.15, 0.15,0.1,myCube, myPlane,10);
+        mySphere2 = new Sphere(5, 32, 16, false, -0.3, -0.15,-0.1, myCube, myPlane,-10);
         //repeatme
         var repeatme = function () {
             //renderer
