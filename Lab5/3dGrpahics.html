@@ -66,6 +66,7 @@
                 //colliision between spheres
 
                 if (otherBall) {
+                    //distance between the spheres
                     const distance = Math.sqrt(Math.pow(this.sphere.position.x - otherBall.sphere.position.x, 2) + Math.pow(this.sphere.position.y - otherBall.sphere.position.y, 2) + Math.pow(this.sphere.position.z - otherBall.sphere.position.z, 2));
                     //console.log(distance);
                     if (distance < this.radius + otherBall.radius) {
