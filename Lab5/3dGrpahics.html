@@ -24,6 +24,7 @@
                 this.box = box;
                 this.plane = plane;
                 this.position = position;
+                this.gravity = 0.005;
                 this.geometry = new THREE.SphereGeometry(this.radius, this.segmentWidth, this.segmentHeight);
                 this.material = new THREE.MeshLambertMaterial({ color: 0xffff00, wireframe: this.wireframeOn });
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
@@ -36,7 +37,7 @@
                 //Code to rotate sphere
                 this.sphere.rotation.x += 0.01;
                 this.sphere.rotation.y += 0.01;
-
+                this.velocityY -= this.gravity;
                 this.sphere.position.x += this.velocityX;
                 this.sphere.position.y += this.velocityY;
 
@@ -135,7 +136,7 @@
         myPlane = new plane(50, 50, myCube);
         //sphere added
         mySphere = new Sphere(5, 32, 16, false, 0.15, 0.15, myCube, myPlane,10);
-        mySphere2 = new Sphere(5, 32, 16, false, -0.2, -0.15, myCube, myPlane,-10);
+        mySphere2 = new Sphere(5, 32, 16, false, -0.3, -0.15, myCube, myPlane,-10);
         //repeatme
         var repeatme = function () {
             //renderer
