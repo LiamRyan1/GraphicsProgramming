@@ -89,8 +89,9 @@
                 this.depth = depth;
                 this.wireframeOn = wireframeOn;
                 this.geometry = new THREE.BoxGeometry(this.width, this.height, this.depth);
-                this.material = new THREE.MeshLambertMaterial({ color: 0x00ff00, wireframe: this.wireframeOn });
+                this.material = new THREE.MeshLambertMaterial({ color: 0x00ff00, wireframe: this.wireframeOn,transparent:true, opacity:0.5});
                 this.cube = new THREE.Mesh(this.geometry, this.material);
+                this.cube.receiveShadow = true;
                 scene.add(this.cube);
             }
         }
@@ -102,7 +103,6 @@
                 this.geometry = new THREE.PlaneGeometry(this.width, this.height);
                 this.material = new THREE.MeshLambertMaterial({ color: 0xffff00, side: THREE.DoubleSide });
                 this.plane = new THREE.Mesh(this.geometry, this.material);
-
                 //ensure plane is at the bottom of the cube
                 this.plane.position.set(0, ((this.box.width / 2 + 1) * -1), 0);//plane appear slightly above the bottom of the cube
                 this.plane.rotation.x = Math.PI / 2; //rotate 90 degrees from its default position to lay flat
@@ -131,7 +131,7 @@
         var helper = new THREE.CameraHelper(spotLight.shadow.camera);
         scene.add(helper);
         //cube added
-        myCube = new box(50, 50, 50, true);
+        myCube = new box(50, 50, 50, false);
         //plane added
         myPlane = new plane(50, 50, myCube);
         //sphere added
