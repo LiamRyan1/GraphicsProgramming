@@ -14,7 +14,7 @@
     <script type="text/javascript">
 
         class Sphere {
-            constructor(radius, segmentWidth, segmentHeight, wireframeOn, velocityX, velocityY,velocityZ, box, plane,position) {
+            constructor(radius, segmentWidth, segmentHeight, wireframeOn, velocityX, velocityY, velocityZ, box, plane, position) {
                 this.radius = radius;
                 this.segmentWidth = segmentWidth;
                 this.segmentHeight = segmentHeight;
@@ -30,9 +30,9 @@
 
                 this.geometry = new THREE.SphereGeometry(this.radius, this.segmentWidth, this.segmentHeight);
                 this.material = new THREE.MeshLambertMaterial({ color: 0xffff00, wireframe: this.wireframeOn });
-                this.wireFrameMaterial =  new THREE.MeshBasicMaterial( { color: 0x000000 ,wireframe:true } ); 
+                this.wireFrameMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true });
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
-                this.wireSphere = new THREE.Mesh(this.geometry,this.wireFrameMaterial);
+                this.wireSphere = new THREE.Mesh(this.geometry, this.wireFrameMaterial);
                 //https://threejs.org/docs/#api/en/objects/Group how to group objects together
                 this.sphereGroup = new THREE.Group();
                 this.sphereGroup.add(this.sphere);
@@ -53,7 +53,7 @@
                 //check collision with the walls of the box and reverse direction if necessary
                 const halfBoxWidth = this.box.width / 2;
                 const halfBoxHeight = this.box.height / 2;
-                const halfBoxDepth = this.box.depth /2;
+                const halfBoxDepth = this.box.depth / 2;
                 const sphereRadius = this.radius;
                 //check for collision with the walls
                 if (this.sphereGroup.position.x + sphereRadius > halfBoxWidth || this.sphereGroup.position.x - sphereRadius < -halfBoxWidth) {
@@ -83,24 +83,46 @@
                 }
 
                 //colliision between spheres
-
                 if (otherBall) {
-                    //distance between the spheres
-                    const distance = Math.sqrt(Math.pow(this.sphereGroup.position.x - otherBall.sphereGroup.position.x, 2) + Math.pow(this.sphereGroup.position.y - otherBall.sphereGroup.position.y, 2) + Math.pow(this.sphereGroup.position.z - otherBall.sphereGroup.position.z, 2));
-                    //console.log(distance);
+                    //distance between the centers of the spheres
+                    const distanceX = this.sphereGroup.position.x - otherBall.sphereGroup.position.x;
+                    const distanceY = this.sphereGroup.position.y - otherBall.sphereGroup.position.y;
+                    const distanceZ = this.sphereGroup.position.z - otherBall.sphereGroup.position.z;
+                    const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
+
+                    //check for overlap
                     if (distance < this.radius + otherBall.radius) {
-                        //REverse direction
-                        this.velocityY = -this.velocityY; 
+                        //overlap distance
+                        const overlap = (this.radius + otherBall.radius) - distance;
+
+                        //normalize the direction vector 
+                        //smaintain direction while changing length
+                        const nx = distanceX / distance;
+                        const ny = distanceY / distance;
+                        const nz = distanceZ / distance;
+
+                        //prevent overlap
+                        //move this  sphere
+                        //normalise * how much sphere overlap * 0.5 to split the amount needed to move to avoid overlapping between both spheres
+                        this.sphereGroup.position.x += nx * overlap * 0.5;
+                        this.sphereGroup.position.y += ny * overlap * 0.5;
+                        this.sphereGroup.position.z += nz * overlap * 0.5; 
+                        //move the other sphere
+                        otherBall.sphereGroup.position.x -= nx * overlap * 0.5; 
+                        otherBall.sphereGroup.position.y -= ny * overlap * 0.5;
+                        otherBall.sphereGroup.position.z -= nz * overlap * 0.5; 
+
+                        //reverse velocity upon collision
+                        this.velocityY = -this.velocityY;
                         this.velocityX = -this.velocityX;
                         this.velocityZ = -this.velocityZ;
-                        otherBall.velocityY = -otherBall.velocityY; 
+                        otherBall.velocityY = -otherBall.velocityY;
                         otherBall.velocityX = -otherBall.velocityX;
-                        otherBall.velocityZ = -otherBall.velocityZ; 
-                        console.log("Spheres colided");
+                        otherBall.velocityZ = -otherBall.velocityZ;
+                        console.log("Spheres collided");
                     }
                 }
             }
-
         }
         class box {
             constructor(height, width, depth, wireframeOn) {
@@ -109,7 +131,7 @@
                 this.depth = depth;
                 this.wireframeOn = wireframeOn;
                 this.geometry = new THREE.BoxGeometry(this.width, this.height, this.depth);
-                this.material = new THREE.MeshLambertMaterial({ color: 0x00ff00, wireframe: this.wireframeOn,transparent:true, opacity:0.3});
+                this.material = new THREE.MeshLambertMaterial({ color: 0x00ff00, wireframe: this.wireframeOn, transparent: true, opacity: 0.3 });
                 this.cube = new THREE.Mesh(this.geometry, this.material);
                 this.cube.receiveShadow = true;
                 scene.add(this.cube);
@@ -155,8 +177,8 @@
         //plane added
         myPlane = new plane(50, 50, myCube);
         //sphere added
-        mySphere = new Sphere(5, 32, 16, false, 0.15, 0.15,0.1,myCube, myPlane,10);
-        mySphere2 = new Sphere(5, 32, 16, false, -0.3, -0.15,-0.1, myCube, myPlane,-10);
+        mySphere = new Sphere(5, 32, 16, false, 0.15, 0.15, 0.1, myCube, myPlane, 10);
+        mySphere2 = new Sphere(5, 32, 16, false, -0.3, -0.15, -0.1, myCube, myPlane, -10);
         //repeatme
         var repeatme = function () {
             //renderer
